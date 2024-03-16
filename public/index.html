@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robot Arm Control</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="../src/renderer.js"></script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+</head>
+<body>
+    <h1>Robot Arm Control</h1>
+    
+    <div>
+        <div>
+            <label for="link1">Claw</label>
+            <input type="range" id="link1" min="0" max="180" step="1">
+            <output for="link1"></output>
+        </div>
+
+        <div>
+            <label for="link2">Gripper Rotation</label>
+            <input type="range" id="link2" min="0" max="180" step="1">
+            <output for="link2"></output>
+        </div>
+
+        <div>
+            <label for="link3">Wrist</label>
+            <input type="range" id="link3" min="0" max="180" step="1">
+            <output for="link3"></output>
+        </div>
+
+        <div>
+            <label for="link4">2nd Swing Arm</label>
+            <input type="range" id="link4" min="0" max="180" step="1">
+            <output for="link4"></output>
+        </div>
+
+        <div>
+            <label for="link5">1st Swing Arm</label>
+            <input type="range" id="link5" min="0" max="180" step="1">
+            <output for="link5"></output>
+        </div>
+        <div>
+            <label for="link6">Base</label>
+            <input type="range" id="link6" min="0" max="180" step="1">
+            <output for="link6"></output>
+        </div>
+    </div>
+    <div>
+        <button>Send</button>
+        <button>Home</button>
+        <button>Extend Forwards</button>
+        <button>Extend Backwards</button>
+        <button>Extend Vertically</button>
+    </div>
+</body>
+</html>
