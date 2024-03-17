@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "electron": "^29.1.4",
-    "mavlink": "^1.0.1"
+    "mavlink": "^1.0.1",
+    "p5": "^1.9.1"
   }
 }

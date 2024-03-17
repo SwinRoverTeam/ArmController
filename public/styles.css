@@ -79,3 +79,11 @@ button:hover {
     margin-top: 20px;
     background-color: var(--color-surface-200);
 }
+#canvasContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+    background-color: var(--color-surface-200);
+}

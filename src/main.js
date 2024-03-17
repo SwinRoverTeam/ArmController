@@ -79,8 +79,9 @@ function sendArmLoc() {
     let msg = new mavlink.messages.COMMAND_LONG(1, 1, 0, 0, 0, [0, 0, 0, 0, 0, 0, 0]);
 
     // Serialize the message to a Buffer
-    let message = new Buffer(msg.pack(myMAV));
+    let message = Buffer.from(msg.pack(myMAV));
 
     // Send the message over the UDP socket
     socket.send(message, 0, message.length, 14550, IPAddr);
+    console
 }
