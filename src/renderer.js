@@ -55,7 +55,7 @@ window.onload = () => {
       console.log(robotArmControl);
 
       // Send the values to the main process
-      ipcRenderer.send('robot-arm-control', robotArmControl);
+      ipcRenderer.send('updateArm', robotArmControl);
     });
   document.getElementById('homeButton').addEventListener('click', () => {
     ipcRenderer.send('robot-arm-home');
@@ -69,6 +69,9 @@ window.onload = () => {
   });
   document.getElementById('extendVerticallyButton').addEventListener('click', () => {
     //
+  });
+  document.getElementById('ARM').addEventListener('click', () => {
+    ipcRenderer.send('ARMRover');
   });
 }
 

@@ -1,12 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 
-const dgram = require('dgram');
-const mavlink = require('mavlink');
+const { spawn } = require('child_process')
 
-const IPAddr = '192.168.144.11'
+const pythonCommand = 'python';
+const PyPATH = '.\\pymv.py';
+const IPAddr = 'localhost'
 let win;
-let myMAV, socket;
 let ArmLoc = {
     claw: 0,
     gripperRotation: 0,
@@ -45,32 +45,15 @@ app.on('window-all-closed', function () {
 })
 
 
-
-// Create a new MAVLink instance
-myMAV = new mavlink(1,1);
-
-// Create a UDP socket
-socket = dgram.createSocket('udp4');
-
-// Set up the socket to listen for incoming messages
-socket.on('message', (msg, rinfo) => {
-  // Parse the incoming message with MAVLink
-  myMAV.parse(msg);
-});
-
-// Bind the socket to a port
-socket.bind(14550); // Use the appropriate port for your application
-
-// Set up MAVLink to handle decoded messages
-myMAV.on('message', function(message) {
-  console.log(message);
-});
-
 ipcMain.on('updateArm', (event, arg) => {
     ArmLoc = arg;
     console.log(ArmLoc);
     sendArmLoc();
 });
+ipcMain.on('ARMRover', (event) => {
+    sendMAVLink('0', ArmLoc);
+}
+);
 
 function sendArmLoc() {
     // Create a new MAVLink message
@@ -83,5 +66,21 @@ function sendArmLoc() {
 
     // Send the message over the UDP socket
     socket.send(message, 0, message.length, 14550, IPAddr);
-    console
+    console.log('Sent message:', msg);
+}
+
+function sendMAVLink(var1, var2){
+  const python = spawn(pythonCommand, [PyPATH,var1, JSON.stringify(var2)]);
+
+  python.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+  });
+
+  python.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+  });
+
+  python.on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
+  });
 }
