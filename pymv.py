@@ -9,10 +9,10 @@ master = mavutil.mavlink_connection('udp:localhost:14551')
 master.wait_heartbeat()
 
 
-arg = sys.argv[1]
-values = json.loads(sys.argv[2])
+arg = sys.argv[1] #Get command
+values = json.loads(sys.argv[2]) #get values like motor pos
 
-# Print some information about the autopilot
+# Print some information about the autopilot, these are ids to be used in commands
 print(f"Autopilot: {master.target_system}/{master.target_component}")
 
 
@@ -25,10 +25,11 @@ def ArmRover():
         mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0
     )
 def MoveArm():
-    print("Moving Arm")
+    print("Moving Arm") 
+    #values is defined as ArmLoc in node.js
     master.mav.command_long_send(
         master.target_system, master.target_component,
-        mavutil.mavlink.MAV_CMD_DO_SET_SERVO, 0, 1, values, 0, 0, 0, 0, 0
+        mavutil.mavlink.MAV_CMD_DO_SET_SERVO, 0, 1, values[0], values[1] , values[2], values[3], values[4] , values[5]
     )
 
 
@@ -39,14 +40,12 @@ def cmd(value):
         '0': lambda: ArmRover(),
         '1': lambda: MoveArm(),
         '2': lambda: print("Case 3"),
-        # Add more cases as needed
+        
     }
-    # Get the corresponding action based on the value
     action = switch.get(value, lambda: print("Invalid case"))
-    # Execute the action
     action()
 
-# Example usage
+
 cmd(arg)
 
 # Close the connection
