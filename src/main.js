@@ -4,8 +4,9 @@ const path = require('path')
 const dgram = require('dgram');
 const mavlink = require('mavlink');
 
-
+const IPAddr = '192.168.144.11'
 let win;
+let myMAV, socket;
 let ArmLoc = {
     claw: 0,
     gripperRotation: 0,
@@ -19,8 +20,8 @@ let ArmLoc = {
 
 function createWindow () {
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1920,
+    height: 1080,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true,
@@ -43,13 +44,13 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
-const IPAddr = '192.168.144.11'
+
 
 // Create a new MAVLink instance
-let myMAV = new mavlink(1,1);
+myMAV = new mavlink(1,1);
 
 // Create a UDP socket
-let socket = dgram.createSocket('udp4');
+socket = dgram.createSocket('udp4');
 
 // Set up the socket to listen for incoming messages
 socket.on('message', (msg, rinfo) => {
