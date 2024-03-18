@@ -9,7 +9,8 @@ let robotArmControl = {
   gripperRotation: 45,
   claw: 0
 };
-  
+
+let armed = false;
 let homed = false;
 let sketch;
 ipcRenderer.on('robot-arm-homed', () => {
@@ -21,7 +22,9 @@ ipcRenderer.on('error', (event, err) => {
 
 
 window.onload = () => {
-  new p5(sketch);
+  document.getElementById('ARM').innerHTML = 'ARM';
+  document.getElementById('ARM').style.backgroundColor = 'green';
+  let p = new p5(sketch);
   for (let i = 1; i <= 6; i++) {
     let slider = document.getElementById(`link${i}`);
     let output = document.getElementById(`link${i}Value`);
@@ -30,27 +33,27 @@ window.onload = () => {
       output.innerHTML = this.value;
     }
   }
+  //document ids
+  claw = document.getElementById('link1');
+  gripperRotation = document.getElementById('link2');
+  wrist = document.getElementById('link3');
+  secondSwingArm = document.getElementById('link4');
+  firstSwingArm = document.getElementById('link5');
+  base = document.getElementById('link6');
+
     // Listen for button press
   document.getElementById('sendButton').addEventListener('click', () => {
       if (!homed) {
         alert('Please home the robot arm first');
         return;
       }
-      // Get values from sliders
-      let clawValue = document.getElementById('link1').value;
-      let gripperRotationValue = document.getElementById('link2').value;
-      let wristValue = document.getElementById('link3').value;
-      let secondSwingArmValue = document.getElementById('link4').value;
-      let firstSwingArmValue = document.getElementById('link5').value;
-      let baseValue = document.getElementById('link6').value;
-
       // Load values into robotArmControl object
-      robotArmControl.claw = clawValue;
-      robotArmControl.gripperRotation = gripperRotationValue;
-      robotArmControl.wrist = wristValue;
-      robotArmControl.secondSwingArm = secondSwingArmValue;
-      robotArmControl.firstSwingArm = firstSwingArmValue;
-      robotArmControl.base = baseValue;
+      robotArmControl.claw = claw.value;
+      robotArmControl.gripperRotation = gripperRotation.value;
+      robotArmControl.wrist = wrist.value;
+      robotArmControl.secondSwingArm = secondSwingArm.value;
+      robotArmControl.firstSwingArm = firstSwingArm.value;
+      robotArmControl.base = base.value;
       
       console.log(robotArmControl);
 
@@ -71,12 +74,32 @@ window.onload = () => {
     //
   });
   document.getElementById('ARM').addEventListener('click', () => {
-    ipcRenderer.send('ARMRover');
+    switArm();
   });
-}
+  document.getElementById('NextCam').addEventListener('click', () => {
+    ipcRenderer.send('NextCam');
+  });
+  document.getElementById('PrevCam').addEventListener('click', () => {
+    ipcRenderer.send('PrevCam');
+  });
+  firstSwingArm.addEventListener('change', () => {
+    robotArmControl.firstSwingArm = firstSwingArm.value;
+    p.draw();
+  });
+  secondSwingArm.addEventListener('change', () => {
+    robotArmControl.secondSwingArm = secondSwingArm.value;
+    p.draw();
+  });
+  wrist.addEventListener('change', () => {
+    robotArmControl.wrist = wrist.value;
+    p.draw();
+  });
+
+};
 
 
 sketch = function(p) {
+  
   let base;
   let links = [];
   let numLinks = 3;
@@ -141,3 +164,17 @@ sketch = function(p) {
       }
   }
 };
+
+function switArm() {
+  if (armed) {
+    document.getElementById('ARM').innerHTML = 'Disarm';
+    document.getElementById('ARM').style.backgroundColor = 'red';
+    armed = false;
+    ipcRenderer.send('Disarm');
+  } else {
+    document.getElementById('ARM').innerHTML = 'ARM';
+    document.getElementById('ARM').style.backgroundColor = 'green';
+    ipcRenderer.send('ARMRover');
+    armed = true;
+  }
+}

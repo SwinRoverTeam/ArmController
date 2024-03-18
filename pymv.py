@@ -24,6 +24,13 @@ def ArmRover():
         master.target_system, master.target_component,
         mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0
     )
+def Disarm():
+    print("Disarm Rover")
+    master.mav.command_long_send(
+        master.target_system, master.target_component,
+        mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 0, 0, 0, 0, 0, 0, 0
+    )
+
 def MoveArm():
     print("Moving Arm") 
     #values is defined as ArmLoc in node.js
@@ -32,6 +39,19 @@ def MoveArm():
         mavutil.mavlink.MAV_CMD_DO_SET_SERVO, 0, 1, values[0], values[1] , values[2], values[3], values[4] , values[5]
     )
 
+def NextCam():
+    print("Next Camera")
+    master.mav.command_long_send(
+        master.target_system, master.target_component,
+        mavutil.mavlink.MAV_CMD_DO_SET_CAM_TRIGG_DIST, 0, 1, 0, 0, 0, 0, 0, 0
+    )
+
+def PrevCam():
+    print("Previous Camera")
+    master.mav.command_long_send(
+        master.target_system, master.target_component,
+        mavutil.mavlink.MAV_CMD_DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0, 0
+    )
 
 
 # Define the switch statement
@@ -39,7 +59,9 @@ def cmd(value):
     switch = {
         '0': lambda: ArmRover(),
         '1': lambda: MoveArm(),
-        '2': lambda: print("Case 3"),
+        '2': lambda: NextCam(),
+        '3': lambda: PrevCam(),
+        '4': lambda: Disarm()
         
     }
     action = switch.get(value, lambda: print("Invalid case"))

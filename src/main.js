@@ -52,8 +52,18 @@ ipcMain.on('updateArm', (event, arg) => {
 });
 ipcMain.on('ARMRover', (event) => {
     sendMAVLink('0', ArmLoc);
-}
-);
+});
+ipcMain.on('Disarm',(event) => {
+  sendMAVLink('4', ArmLoc);
+});
+
+ipcMain.on('NextCam', (event) => {
+    sendMAVLink('2', ArmLoc);
+});
+
+ipcMain.on('PrevCam', (event) => {
+    sendMAVLink('3', ArmLoc);
+});
 
 function sendArmLoc() {
     // Create a new MAVLink message
