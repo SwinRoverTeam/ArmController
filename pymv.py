@@ -16,13 +16,20 @@ values = json.loads(sys.argv[2]) #get values like motor pos
 print(f"Autopilot: {master.target_system}/{master.target_component}")
 
 
-
+print(values)
 
 def ArmRover():
     print("Arming Rover")
     master.mav.command_long_send(
         master.target_system, master.target_component,
         mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0
+    )
+def Home():
+    print("Moving Arm") 
+    #values is defined as ArmLoc in node.js
+    master.mav.command_long_send(
+        master.target_system, master.target_component,
+        mavutil.mavlink.MAV_CMD_DO_SET_SERVO, 0, 0, float(values['firstSwingArm']), float(values['secondSwingArm']) ,float(values['wrist']), float(values['base']), float(values['gripperRotation']), float(values['claw'])
     )
 def Disarm():
     print("Disarm Rover")
@@ -36,7 +43,7 @@ def MoveArm():
     #values is defined as ArmLoc in node.js
     master.mav.command_long_send(
         master.target_system, master.target_component,
-        mavutil.mavlink.MAV_CMD_DO_SET_SERVO, 0, 1, values[0], values[1] , values[2], values[3], values[4] , values[5]
+        mavutil.mavlink.MAV_CMD_DO_SET_SERVO, 0, float(values[0]), float(values[1]), 0 ,0, 0, 0, 0
     )
 
 def NextCam():

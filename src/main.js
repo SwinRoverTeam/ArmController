@@ -5,7 +5,6 @@ const { spawn } = require('child_process')
 
 const pythonCommand = 'python';
 const PyPATH = '.\\pymv.py';
-const IPAddr = 'localhost'
 let win;
 let ArmLoc = {
     claw: 0,
@@ -46,10 +45,52 @@ app.on('window-all-closed', function () {
 
 
 ipcMain.on('updateArm', (event, arg) => {
-    ArmLoc = arg;
-    console.log(ArmLoc);
-    sendArmLoc();
+  let found = false;
+  console.log(arg);
+  for (let prop in arg) {
+      if (arg[prop] !== 0) {
+        found = true;
+          let name = prop;
+          let value = arg[prop];
+          console.log(`Name: ${name}, Value: ${value}`);
+          // You can now use the name and value variables as needed
+          let index;
+          switch (name) {
+              case 'base':
+                  index = 0;
+                  break;
+              case 'firstSwingArm':
+                  index = 1;
+                  break;
+              case 'secondSwingArm':
+                  index = 2;
+                  break;
+              case 'wrist':
+                  index = 3;
+                  break;
+              case 'gripperRotation':
+                  index = 4;
+                  break;
+              case 'claw':
+                  index = 5;
+                  break;
+              default:
+                  break;
+          }
+          let ar = [index, value];
+          console.log(ar);
+          sendMAVLink('1', ar);
+          if (found){
+            break;
+          }
+      }
+    
+  }
+  if (!found) {
+    sendMAVLink('1', ArmLoc);
+  }
 });
+
 ipcMain.on('ARMRover', (event) => {
     sendMAVLink('0', ArmLoc);
 });
@@ -65,21 +106,11 @@ ipcMain.on('PrevCam', (event) => {
     sendMAVLink('3', ArmLoc);
 });
 
-function sendArmLoc() {
-    // Create a new MAVLink message
-    // Replace 'COMMAND_LONG' with the name of the command you want to send
-    // Replace the array with the parameters for the command
-    let msg = new mavlink.messages.COMMAND_LONG(1, 1, 0, 0, 0, [0, 0, 0, 0, 0, 0, 0]);
 
-    // Serialize the message to a Buffer
-    let message = Buffer.from(msg.pack(myMAV));
 
-    // Send the message over the UDP socket
-    socket.send(message, 0, message.length, 14550, IPAddr);
-    console.log('Sent message:', msg);
-}
 
 function sendMAVLink(var1, var2){
+  console.log('Maving');
   const python = spawn(pythonCommand, [PyPATH,var1, JSON.stringify(var2)]);
 
   python.stdout.on('data', (data) => {
