@@ -45,6 +45,16 @@ app.on('window-all-closed', function () {
 
 
 ipcMain.on('updateArm', (event, arg) => {
+  constructCMD(arg);
+});
+
+ipcMain.on('stopArm', (event) => {
+  console.log("STOP");
+  let arg = {'nuts': 'balls'};
+  sendMAVLink('5', arg);
+  });
+
+function constructCMD(arg){
   let found = false;
   console.log(arg);
   for (let prop in arg) {
@@ -58,6 +68,7 @@ ipcMain.on('updateArm', (event, arg) => {
           switch (name) {
               case 'base':
                   index = 0;
+                  console.log("MoveBase");
                   break;
               case 'firstSwingArm':
                   index = 1;
@@ -86,10 +97,10 @@ ipcMain.on('updateArm', (event, arg) => {
       }
     
   }
-  if (!found) {
-    sendMAVLink('1', ArmLoc);
-  }
-});
+}
+
+
+
 
 ipcMain.on('ARMRover', (event) => {
     sendMAVLink('0', ArmLoc);

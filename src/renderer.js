@@ -10,7 +10,6 @@ let robotArmControl = {
 };
 
 let armed = false;
-let homed = false;
 let mousedown = false;
 ipcRenderer.on('robot-arm-homed', () => {
   homed = true;
@@ -21,23 +20,124 @@ ipcRenderer.on('error', (event, err) => {
 
 function armevents() {
   const parentDiv = document.getElementById('control'); 
-  parentDiv.addEventListener('click', (event) => {
-    mousedown = true;
-    const targetId = event.target.id;
-    console.log(targetId);
-    if (targetId.includes('l')) {
-      const linkNumber = targetId.replace('l', '');
-      setRobotArmControl(linkNumber, -1);
-    } else if (targetId.includes('r')) {
-      const linkNumber = targetId.replace('r', '');
-      setRobotArmControl(linkNumber, 1);
-    }
-  });
-  parentDiv.addEventListener('mouseup', (event) => {
-    if (mousedown) {
+  document.getElementById('link1l').addEventListener('click', () => {
+    if (mousedown){
       mousedown = false;
       console.log('mouseup');
       resetRobotArmControl();
+    } else {
+    setRobotArmControl('link1', 1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link1r').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+    setRobotArmControl('link1', -1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link2l').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+    setRobotArmControl('link2', 1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link2r').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+    setRobotArmControl('link2', -1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link3l').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+    setRobotArmControl('link3', 1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link3r').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+    setRobotArmControl('link3', -1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link4l').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+      setRobotArmControl('link4', 1);
+      mousedown = true;
+    }
+  });
+  document.getElementById('link4r').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+    setRobotArmControl('link4', -1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link5l').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+    setRobotArmControl('link5', 1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link5r').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+    setRobotArmControl('link5', -1);
+    mousedown = true;
+    }
+  });
+  document.getElementById('link6l').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+      setRobotArmControl('link6', 1);
+      mousedown = true;
+    }
+  });
+  document.getElementById('link6r').addEventListener('click', () => {
+    if (mousedown){
+      mousedown = false;
+      console.log('mouseup');
+      resetRobotArmControl();
+    } else {
+      setRobotArmControl('link6', -1);
+      mousedown = true;
     }
   });
 }
@@ -50,10 +150,16 @@ function resetRobotArmControl() {
     firstSwingArm: 0,
     base: 0
   };
+  sendStopMotor()
 }
 
+function sendStopMotor(){
+  console.log(robotArmControl);
+  ipcRenderer.send('stopArm');
+}
 
 function setRobotArmControl(id, value) {
+  console.log('setting ctrol')
   switch (id) {
     case 'link1':
       robotArmControl.base = value;
@@ -79,7 +185,7 @@ function setRobotArmControl(id, value) {
 
   console.log(robotArmControl);
   ipcRenderer.send('updateArm', robotArmControl);
-  resetRobotArmControl();
+  //resetRobotArmControl();
 }
 
 window.onload = () => {
@@ -91,7 +197,6 @@ window.onload = () => {
   document.getElementById('stop').addEventListener('click', () => {
       // Send the values to the main process
       resetRobotArmControl();
-      ipcRenderer.send('updateArm', robotArmControl);
     });
   document.getElementById('ARM').addEventListener('click', () => {
     switArm();
