@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 
-const { spawn } = require('child_process')
+const { spawn, fork } = require('child_process')
 
 const pythonCommand = 'python';
 const PyPATH = '.\\pymv.py';
@@ -14,8 +14,6 @@ let ArmLoc = {
     firstSwingArm: 0,
     base: 0
     };
-
-
 
 function createWindow () {
   win = new BrowserWindow({
@@ -32,6 +30,7 @@ function createWindow () {
 }
 
 app.whenReady().then(() => {
+  startVidStream();
   createWindow()
   
   app.on('activate', function () {
@@ -50,7 +49,7 @@ ipcMain.on('updateArm', (event, arg) => {
 
 ipcMain.on('stopArm', (event) => {
   console.log("STOP");
-  let arg = {'nuts': 'balls'};
+  let arg = {'nonsense': 'stuff'};
   sendMAVLink('5', arg);
   });
 
@@ -134,5 +133,17 @@ function sendMAVLink(var1, var2){
 
   python.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
+  });
+}
+
+function startVidStream(){
+  const streamProcess = fork(`./src/vidstream.js`);
+
+  streamProcess.on('error', (err) => {
+    console.error('Failed to start subprocess.');
+  });
+  
+  streamProcess.on('exit', () => {
+    console.log('Subprocess stopped.');
   });
 }

@@ -10,8 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "electron": "^29.1.4",
+    "ffmpeg": "^0.0.4",
+    "fluent-ffmpeg": "^2.1.2",
+    "jsmpeg": "^1.0.0",
     "mavlink": "^1.0.1",
+    "node-rtsp-stream": "^0.0.9",
     "p5": "^1.9.1"
   }
 }

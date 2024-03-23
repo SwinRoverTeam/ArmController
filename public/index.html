@@ -4,7 +4,7 @@
     <title>Robot Arm Control</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="../src/renderer.js"></script>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; media-src http://localhost:9999/; script-src 'self'">
 </head>
 <body>
     <h1>Robot Arm Control</h1>
@@ -35,11 +35,17 @@
             <button id="link6r">Claw R</button>
         </div>
     </div>
+    <div id="video">
+        <canvas id="videoCanvas"></canvas>
+    </div>
     <div id="buttons">
         <button id="stop">STOP</button>
         <button id="ARM">ARM</button>
         <button id="nextCam">Next Camera</button>
         <button id="PrevCam">Previous Camera</button>
+    </div>
+    <div id="Monitor">
+
     </div>
 </body>
 </html>

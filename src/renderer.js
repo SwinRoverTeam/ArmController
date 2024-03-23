@@ -1,5 +1,12 @@
 const { ipcRenderer } = require('electron');
 // Define an object to store the values
+const jsmpeg = require('jsmpeg');
+
+var canvas = document.getElementById('videoCanvas');
+var ws = new WebSocket('ws://localhost:9999/');
+var player = new jsmpeg(ws, {canvas:canvas});
+
+
 let robotArmControl = {
   claw: 0,
     gripperRotation: 0,
